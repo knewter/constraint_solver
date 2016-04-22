@@ -5,13 +5,14 @@ defmodule ConstraintSolver do
         {meeting, day}
       end
 
-    IO.puts inspect pairs
-
     # days can't be the same
     working_pairs =
       for {meeting, day} <- pairs, {meeting2, day2} <- pairs, meeting != meeting2 && day != day2 do
-        {{meeting, day}, {meeting2, day2}}
+        [[meeting, day], [meeting2, day2]]
       end
+      |> Enum.map(&Enum.sort/1)
+      |> Enum.map(fn([[m1, d1], [m2, d2]]) -> {{m1, d1}, {m2, d2}} end)
+      |> Enum.uniq
   end
 end
 
