@@ -1,18 +1,15 @@
 defmodule ConstraintSolver do
   def meeting_solver_1(days, meetings) do
-    pairs =
-      for meeting <- meetings, day <- days do
-        {meeting, day}
-      end
-
-    # days can't be the same
-    working_pairs =
-      for {meeting, day} <- pairs, {meeting2, day2} <- pairs, meeting != meeting2 && day != day2 do
-        [[meeting, day], [meeting2, day2]]
-      end
-      |> Enum.map(&Enum.sort/1)
-      |> Enum.map(fn([[m1, d1], [m2, d2]]) -> {{m1, d1}, {m2, d2}} end)
-      |> Enum.uniq
+    # For each possible assignment of values to the variables v1, v2 (here they're more like {m1, d1})
+    # Constraint: for {m1, d1} and {m2, d2}, d1 != d2
+    for meeting <- meetings,
+        meeting2 <- meetings,
+        day <- days,
+        day2 <- days,
+        meeting < meeting2,
+        day != day2 do
+      {{meeting, day}, {meeting2, day2}}
+    end |> Enum.sort
   end
 end
 
