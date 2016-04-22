@@ -1,6 +1,17 @@
 defmodule ConstraintSolver do
   def meeting_solver_1(days, meetings) do
-    []
+    pairs =
+      for meeting <- meetings, day <- days do
+        {meeting, day}
+      end
+
+    IO.puts inspect pairs
+
+    # days can't be the same
+    working_pairs =
+      for {meeting, day} <- pairs, {meeting2, day2} <- pairs, meeting != meeting2 && day != day2 do
+        {{meeting, day}, {meeting2, day2}}
+      end
   end
 end
 
