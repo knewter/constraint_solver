@@ -1,14 +1,14 @@
 defmodule ChessEngine do
-  @ranks [0, 1, 2, 3, 4, 5, 6, 7]
-  @files [0, 1, 2, 3, 4, 5, 6, 7]
+  @files [0, 1, 2, 3, 4, 5, 6, 7] # Columns
+  @ranks [0, 1, 2, 3, 4, 5, 6, 7] # Rows
 
-  def calculate_move({:white, :pawn, {piece_rank, piece_file}} = piece, pieces) do
+  def calculate_move({:white, :pawn, {piece_file, piece_rank}} = piece, pieces) do
     for rank <- @ranks,
         file <- @files,
-        file > piece_file,
-        file <= piece_file + 2,
-        rank == piece_rank do
-      {rank, file}
+        rank > piece_rank,
+        rank <= piece_rank + 2,
+        file == piece_file do
+      {file, rank}
     end
   end
 end
@@ -17,7 +17,7 @@ defmodule ConstraintSolver.ChessTest do
   use ExUnit.Case
 
   test "valid pawn moves on a blank board" do
-    # Positions are in {rank, file} order, 0-indexed
+    # Positions are in {file, rank} order, 0-indexed
     piece = {:white, :pawn, {3, 1}} # Corresponds to d2
     pieces = [piece]
 
